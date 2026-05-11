@@ -1,0 +1,63 @@
+com.example.bookmanager
+├── config/                  # 配置类
+│   ├── SecurityConfig       # Spring Security 配置
+│   ├── CorsConfig           # 跨域配置
+│   └── MyBatisPlusConfig    # MyBatis-Plus 分页插件配置
+│
+├── controller/              # 接口层（控制器）
+│   ├── AuthController       # 登录、注册
+│   ├── UserBookController   # 用户端-图书查询、借还
+│   ├── UserController       # 用户端-个人信息
+│   └── AdminController      # 管理员端-图书管理、用户管理、借阅管理
+│
+├── service/                 # 业务逻辑接口
+│   ├── UserService
+│   ├── BookService
+│   ├── BorrowRecordService
+│   └── impl/                # 业务逻辑实现
+│       ├── UserServiceImpl
+│       ├── BookServiceImpl
+│       └── BorrowRecordServiceImpl
+│
+├── mapper/                  # MyBatis-Plus Mapper接口（真正的SQL）
+│   ├── UserMapper
+│   ├── BookMapper
+│   └── BorrowRecordMapper
+│
+├── entity/                  # 实体类（与数据库表对应）
+│   ├── User
+│   ├── Book
+│   └── BorrowRecord
+│
+├── dto/                     # 数据传输对象（前端传来的请求体）
+│   ├── LoginDTO             # 登录请求 {username, password}
+│   ├── RegisterDTO          # 注册请求 {username, password, realName, phone, email}
+│   ├── BorrowDTO            # 借书请求 {bookId}
+│   ├── BookDTO              # 新增/修改图书的请求体
+│   └── UserDTO              # 新增/修改用户的请求体
+│
+├── vo/                      # 视图对象（返回给前端的响应体）
+│   ├── UserVO               # 用户信息（脱敏，不返回密码）
+│   ├── BookVO               # 图书信息（可能拼接了借阅状态）
+│   └── BorrowRecordVO       # 借阅记录（拼了用户名、书名）
+│
+├── common/                  # 通用类
+│   ├── Result               # 统一响应结果 {code, message, data}
+│   └── PageResult           # 分页结果 {total, list}
+│
+├── enums/                   # 枚举类
+│   ├── RoleEnum             # ADMIN, USER
+│   └── BorrowStatusEnum     # BORROWING, RETURNED, OVERDUE
+│
+├── exception/               # 异常处理
+│   ├── BusinessException    # 自定义业务异常
+│   └── GlobalExceptionHandler # 全局异常处理器
+│
+├── interceptor/             # 拦截器
+│   ├── JwtInterceptor       # JWT 校验拦截器
+│   └── WebMvcConfig         # 注册拦截器
+│
+├── utils/                   # 工具类
+│   └── JwtUtils             # JWT 生成与解析
+│
+└── BookManagerApplication   # 启动类

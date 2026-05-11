@@ -1,0 +1,327 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "图书管理系统接口文档",
+    "version": "1.0",
+    "description": "基于Web的图书管理系统后端接口"
+  },
+  "servers": [
+    { "url": "http://localhost:8080", "description": "本地开发环境" }
+  ],
+  "paths": {
+    "/api/login": {
+      "post": {
+        "tags": ["认证"],
+        "summary": "用户登录",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginDTO" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "登录成功，返回token" }
+        }
+      }
+    },
+    "/api/register": {
+      "post": {
+        "tags": ["认证"],
+        "summary": "用户注册",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RegisterDTO" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "注册成功" }
+        }
+      }
+    },
+    "/api/user/books": {
+      "get": {
+        "tags": ["用户端-图书"],
+        "summary": "查询图书列表",
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "size", "in": "query", "schema": { "type": "integer", "default": 10 } },
+          { "name": "keyword", "in": "query", "schema": { "type": "string" } },
+          { "name": "category", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "成功" } },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/api/user/books/{id}": {
+      "get": {
+        "tags": ["用户端-图书"],
+        "summary": "查看图书详情",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "成功" } },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/api/user/borrow/{bookId}": {
+      "post": {
+        "tags": ["用户端-借阅"],
+        "summary": "借书",
+        "parameters": [
+          { "name": "bookId", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "借书成功" } },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/api/user/return/{recordId}": {
+      "post": {
+        "tags": ["用户端-借阅"],
+        "summary": "还书",
+        "parameters": [
+          { "name": "recordId", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "还书成功" } },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/api/user/my-borrows": {
+      "get": {
+        "tags": ["用户端-借阅"],
+        "summary": "查看我的借阅记录",
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "size", "in": "query", "schema": { "type": "integer", "default": 10 } },
+          { "name": "status", "in": "query", "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "成功" } },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/api/user/my-info": {
+      "get": {
+        "tags": ["用户端-个人信息"],
+        "summary": "查看个人信息",
+        "responses": { "200": { "description": "成功" } },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/api/admin/books": {
+      "get": {
+        "tags": ["管理员-图书管理"],
+        "summary": "查询图书列表",
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "size", "in": "query", "schema": { "type": "integer", "default": 10 } },
+          { "name": "keyword", "in": "query", "schema": { "type": "string" } },
+          { "name": "category", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "成功" } },
+        "security": [{ "bearerAuth": [] }]
+      },
+      "post": {
+        "tags": ["管理员-图书管理"],
+        "summary": "新增图书",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/BookDTO" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "新增成功" } },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/api/admin/books/{id}": {
+      "get": {
+        "tags": ["管理员-图书管理"],
+        "summary": "查看图书详情",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "成功" } },
+        "security": [{ "bearerAuth": [] }]
+      },
+      "put": {
+        "tags": ["管理员-图书管理"],
+        "summary": "修改图书",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/BookDTO" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "修改成功" } },
+        "security": [{ "bearerAuth": [] }]
+      },
+      "delete": {
+        "tags": ["管理员-图书管理"],
+        "summary": "删除图书",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "删除成功" } },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/api/admin/users": {
+      "get": {
+        "tags": ["管理员-用户管理"],
+        "summary": "查询用户列表",
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "size", "in": "query", "schema": { "type": "integer", "default": 10 } },
+          { "name": "keyword", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "成功" } },
+        "security": [{ "bearerAuth": [] }]
+      },
+      "post": {
+        "tags": ["管理员-用户管理"],
+        "summary": "新增用户",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserDTO" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "新增成功" } },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/api/admin/users/{id}": {
+      "put": {
+        "tags": ["管理员-用户管理"],
+        "summary": "修改用户",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserDTO" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "修改成功" } },
+        "security": [{ "bearerAuth": [] }]
+      },
+      "delete": {
+        "tags": ["管理员-用户管理"],
+        "summary": "删除用户",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "删除成功" } },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/api/admin/users/{id}/status": {
+      "put": {
+        "tags": ["管理员-用户管理"],
+        "summary": "启用/禁用用户",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "type": "object", "properties": { "status": { "type": "integer" } } }
+            }
+          }
+        },
+        "responses": { "200": { "description": "操作成功" } },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/api/admin/borrows": {
+      "get": {
+        "tags": ["管理员-借阅管理"],
+        "summary": "查看所有借阅记录",
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "size", "in": "query", "schema": { "type": "integer", "default": 10 } },
+          { "name": "status", "in": "query", "schema": { "type": "integer" } }
+        ],
+        "responses": { "200": { "description": "成功" } },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/api/admin/borrows/overdue": {
+      "get": {
+        "tags": ["管理员-借阅管理"],
+        "summary": "查看逾期未还记录",
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "size", "in": "query", "schema": { "type": "integer", "default": 10 } }
+        ],
+        "responses": { "200": { "description": "成功" } },
+        "security": [{ "bearerAuth": [] }]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "LoginDTO": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string", "example": "admin" },
+          "password": { "type": "string", "example": "123456" }
+        }
+      },
+      "RegisterDTO": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string", "example": "newuser" },
+          "password": { "type": "string", "example": "123456" },
+          "realName": { "type": "string", "example": "新用户" },
+          "phone": { "type": "string", "example": "13800000000" },
+          "email": { "type": "string", "example": "newuser@qq.com" }
+        }
+      },
+      "BookDTO": {
+        "type": "object",
+        "properties": {
+          "isbn": { "type": "string", "example": "978-7-111-00000-0" },
+          "title": { "type": "string", "example": "新书名" },
+          "author": { "type": "string", "example": "作者" },
+          "publisher": { "type": "string", "example": "出版社" },
+          "publishDate": { "type": "string", "format": "date", "example": "2024-01-01" },
+          "category": { "type": "string", "example": "计算机" },
+          "description": { "type": "string", "example": "简介" },
+          "coverImage": { "type": "string", "example": "/covers/new.jpg" },
+          "totalQuantity": { "type": "integer", "example": 10 },
+          "location": { "type": "string", "example": "A区-1排-01" }
+        }
+      },
+      "UserDTO": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string", "example": "newuser" },
+          "password": { "type": "string", "example": "123456" },
+          "realName": { "type": "string", "example": "新用户" },
+          "phone": { "type": "string", "example": "13800000000" },
+          "email": { "type": "string", "example": "newuser@qq.com" },
+          "role": { "type": "string", "example": "USER" },
+          "maxBorrow": { "type": "integer", "example": 5 }
+        }
+      }
+    }
+  }
+}
